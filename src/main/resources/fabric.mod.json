@@ -4,7 +4,9 @@
   "version": "${version}",
   "name": "OPaC BlueMap",
   "description": "Syncs your Open Parties and Claims land claims to your BlueMap maps",
-  "authors": [],
+  "authors": [
+    "Gaming32"
+  ],
   "contact": {
     "repo": "https://github.com/Gaming32/opac-bluemap-integration"
   },
