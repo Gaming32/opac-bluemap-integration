@@ -126,6 +126,9 @@ public class OpacBluemapIntegration implements ModInitializer {
                 .then(literal("reload")
                     .executes(ctx -> {
                         loadConfig();
+                        if (CONFIG.getUpdateInterval() < updateIn) {
+                            updateIn = CONFIG.getUpdateInterval();
+                        }
                         ctx.getSource().sendSuccess(
                             Component.literal("Reloaded OPaC BlueMap config").withStyle(ChatFormatting.GREEN),
                             true
