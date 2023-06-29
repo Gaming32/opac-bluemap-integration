@@ -37,7 +37,7 @@ public class OpacBluemapConfig {
         writer.name("updateInterval").value(updateInterval);
 
         writer.comment("The min and max Y for the markers. If these are the same, the marker will be drawn as a flat plane.");
-        writer.comment("Default is 100 to 100.");
+        writer.comment("Default is 75 to 75.");
         writer.name("markerMinY").value(markerMinY);
         writer.name("markerMaxY").value(markerMaxY);
 
