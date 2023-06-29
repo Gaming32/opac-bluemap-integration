@@ -20,7 +20,11 @@ public record ShapeHolder(Shape baseShape, Shape... holes) {
     }
 
     private static Shape createBaseShape(Set<ChunkPos> chunks) {
-        final ChunkPos firstChunk = getBound(chunks, Math::min);
+        ChunkPos firstChunk = getBound(chunks, Math::min);
+        while (!chunks.contains(firstChunk)) {
+            // Step right until we hit a real chunk
+            firstChunk = ChunkPosDirection.RIGHT.add(firstChunk);
+        }
         final List<Vector2d> points = new ArrayList<>();
         points.add(new Vector2d(firstChunk.getMinBlockX(), firstChunk.getMinBlockZ()));
 
