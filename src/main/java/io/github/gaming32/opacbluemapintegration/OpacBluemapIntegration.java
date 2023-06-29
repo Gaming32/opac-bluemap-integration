@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.logging.LogUtils;
 import de.bluecolored.bluemap.api.BlueMapAPI;
 import de.bluecolored.bluemap.api.BlueMapWorld;
+import de.bluecolored.bluemap.api.markers.ExtrudeMarker;
 import de.bluecolored.bluemap.api.markers.Marker;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
 import de.bluecolored.bluemap.api.markers.ShapeMarker;
@@ -20,6 +21,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import org.apache.commons.lang3.StringUtils;
 import org.quiltmc.qup.json.JsonReader;
@@ -206,16 +208,32 @@ public class OpacBluemapIntegration implements ModInitializer {
                                     .build()
                             )
                             .getMarkers();
+                        final float minY = CONFIG.getMarkerMinY();
+                        final float maxY = CONFIG.getMarkerMaxY();
+                        //noinspection SuspiciousNameCombination
+                        final boolean flatPlane = Mth.equal(minY, maxY);
                         markers.keySet().removeIf(k -> k.startsWith(idName + "---"));
                         for (int i = 0; i < shapes.size(); i++) {
                             final ShapeHolder shape = shapes.get(i);
-                            markers.put(idName + "---" + i, ShapeMarker.builder()
-                                .label(displayName)
-                                .fillColor(new Color(playerClaimInfo.getClaimsColor(), 150))
-                                .lineColor(new Color(playerClaimInfo.getClaimsColor(), 255))
-                                .shape(shape.baseShape(), 75)
-                                .holes(shape.holes())
-                                .build()
+                            markers.put(idName + "---" + i,
+                                // Yes these builders are the same. No they don't share a superclass (except for label).
+                                flatPlane
+                                    ? ShapeMarker.builder()
+                                        .label(displayName)
+                                        .fillColor(new Color(playerClaimInfo.getClaimsColor(), 150))
+                                        .lineColor(new Color(playerClaimInfo.getClaimsColor(), 255))
+                                        .shape(shape.baseShape(), minY)
+                                        .holes(shape.holes())
+                                        .depthTestEnabled(CONFIG.isDepthTest())
+                                        .build()
+                                    : ExtrudeMarker.builder()
+                                        .label(displayName)
+                                        .fillColor(new Color(playerClaimInfo.getClaimsColor(), 150))
+                                        .lineColor(new Color(playerClaimInfo.getClaimsColor(), 255))
+                                        .shape(shape.baseShape(), minY, maxY)
+                                        .holes(shape.holes())
+                                        .depthTestEnabled(CONFIG.isDepthTest())
+                                        .build()
                             );
                         }
                     });

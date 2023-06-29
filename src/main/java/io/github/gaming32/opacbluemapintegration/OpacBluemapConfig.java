@@ -7,6 +7,9 @@ import java.io.IOException;
 
 public class OpacBluemapConfig {
     private int updateInterval = 12000; // Every 10 minutes
+    private float markerMinY = 75f;
+    private float markerMaxY = 75f;
+    private boolean depthTest = false;
 
     public void read(JsonReader reader) throws IOException {
         reader.beginObject();
@@ -14,6 +17,9 @@ public class OpacBluemapConfig {
             final String key;
             switch (key = reader.nextName()) {
                 case "updateInterval" -> updateInterval = reader.nextInt();
+                case "markerMinY" -> markerMinY = reader.nextNumber().floatValue();
+                case "markerMaxY" -> markerMaxY = reader.nextNumber().floatValue();
+                case "depthTest" -> depthTest = reader.nextBoolean();
                 default -> {
                     OpacBluemapIntegration.LOGGER.warn("Unknown OPaC BlueMap config key {}. Skipping.", key);
                     reader.skipValue();
@@ -30,6 +36,15 @@ public class OpacBluemapConfig {
         writer.comment("Default is 10 minutes (12000 ticks).");
         writer.name("updateInterval").value(updateInterval);
 
+        writer.comment("The min and max Y for the markers. If these are the same, the marker will be drawn as a flat plane.");
+        writer.comment("Default is 100 to 100.");
+        writer.name("markerMinY").value(markerMinY);
+        writer.name("markerMaxY").value(markerMaxY);
+
+        writer.comment("If set to false, the markers won't be covered up by objects in front of it.");
+        writer.comment("Default is false.");
+        writer.name("depthTest").value(depthTest);
+
         writer.endObject();
     }
 
@@ -39,5 +54,17 @@ public class OpacBluemapConfig {
 
     public void setUpdateInterval(int updateInterval) {
         this.updateInterval = updateInterval;
+    }
+
+    public float getMarkerMinY() {
+        return markerMinY;
+    }
+
+    public float getMarkerMaxY() {
+        return markerMaxY;
+    }
+
+    public boolean isDepthTest() {
+        return depthTest;
     }
 }
