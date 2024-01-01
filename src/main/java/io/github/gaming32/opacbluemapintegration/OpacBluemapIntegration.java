@@ -1,5 +1,6 @@
 package io.github.gaming32.opacbluemapintegration;
 
+import net.minecraft.core.registries.Registries;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.logging.LogUtils;
@@ -190,7 +191,7 @@ public class OpacBluemapIntegration implements ModInitializer {
                 }
                 final String displayName = name;
                 playerClaimInfo.getStream().forEach(entry -> {
-                    final BlueMapWorld world = blueMap.getWorld(ResourceKey.create(Registry.DIMENSION_REGISTRY, entry.getKey())).orElse(null);
+                    final BlueMapWorld world = blueMap.getWorld(ResourceKey.create(Registries.DIMENSION, entry.getKey())).orElse(null);
                     if (world == null) return;
                     final List<ShapeHolder> shapes = createShapes(
                         entry.getValue()
