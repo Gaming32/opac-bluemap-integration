@@ -40,21 +40,21 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings(loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.19.4:2023.06.26@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.3:2023.12.31@zip")
     })
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation("maven.modrinth:open-parties-and-claims:fabric-1.19.4-0.20.4")
-    modRuntimeOnly("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:6.0.2") {
+    modImplementation("maven.modrinth:open-parties-and-claims:fabric-1.20.4-0.20.4")
+    modRuntimeOnly("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:20.4.0") {
         exclude(group: "net.fabricmc")
         exclude(group: "net.fabricmc.fabric-api")
     }
 
     implementation("com.github.BlueMap-Minecraft:BlueMapAPI:v2.6.2")
-    modRuntimeOnly("maven.modrinth:bluemap:3.20-fabric-1.19.4")
+    modRuntimeOnly("maven.modrinth:bluemap:3.20-fabric-1.20")
 
     include(implementation("org.quiltmc.qup:json:0.2.0"))
 }
